@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+   
+
+    stages {
+        stage('git') {
+            steps {
+                echo 'scm'
+				git branch: 'main', url: 'https://github.com/Ramani-github/mindcircuit13.git'
+            }
+        }
+		stage('build') {
+            steps {
+                echo 'buildmvn'
+			    sh 'mvn clean install'
+            }
+        }
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t ramanijadala/mywebapp-3.1 .'
+                }
+            }
+        }
+                stage('Push image to Hub'){
+            steps{
+                script{
+                   withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+                   sh 'docker login -u ramanijadala -p ${dockerhub}'
+
+}
+                   sh 'docker push ramanijadala/mywebapp-3.1'
+                }
+            }
+        }
+        stage('deploy to k8s'){
+            steps{
+                script{
+                    kubernetesDeploy configs: 'deployment.yaml', kubeConfig: [path: ''], kubeconfigId: 'k8s', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+                }
+            }
+        }
+    }
+}
