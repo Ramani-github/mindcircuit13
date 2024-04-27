@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    tools{
+        jdk 'jdk'
+    }
+
+    stages {
+        stage('git') {
+            steps {
+                echo 'scm'
+				git branch: 'main', url: 'https://github.com/Ramani-github/mindcircuit13.git'
+            }
+        }
+		stage('build') {
+            steps {
+                echo 'buildmvn'
+			    sh 'mvn clean install'
+            }
+        }
+		stage('sonar') {
+            steps {
+                echo 'scanning project'
+			    sh '''mvn sonar:sonar \\
+  -Dsonar.host.url=http://35.153.78.63:9000 \\
+  -Dsonar.login=66b281b83b4e67848ad5bc93428d3a1ca17157cd'''
+            }
+        }
+    }
+}
