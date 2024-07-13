@@ -18,12 +18,12 @@
 	<distributionManagement>
 		 <snapshotRepository>
 		    <id>NexusRepo</id>
-		    <url>http://34.203.33.125:8081/repository/mc-snapshot/</url>
+		    <url>http://54.234.58.14:8081/repository/maven-snapshots/</url>
 		 </snapshotRepository>
 		
 		<repository>
 		    <id>NexusRepo</id>
-		    <url>http://34.203.33.125:8081/repository/mc-release/</url>
+		    <url>http://54.234.58.14:8081/repository/maven-releases/</url>
 		</repository>
   	</distributionManagement>
 	
